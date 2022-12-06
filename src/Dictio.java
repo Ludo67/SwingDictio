@@ -31,6 +31,11 @@ public class Dictio extends JFrame{
     public Dictio() {
         loadBtn.addActionListener(new ActionListener() {
             @Override
+            /**
+             * Fonction qui prend le ActionEvent quand le boutton Ajouter est actioné.
+             * Elle ouvrira une fenetre qui demande à l'utilisateur de selectionner un fichier txt.
+             * @param e
+             */
             public void actionPerformed(ActionEvent e) {
                 FileDialog fd = new FileDialog(new JFrame());
                 fd.setVisible(true);
@@ -63,6 +68,11 @@ public class Dictio extends JFrame{
                 reader.close();
             }
         });
+        /**
+         * Fonction qui prend un ActionEvent puis ajoute un mot après que l'utilisateur clique sur le bouton ajouter/modifier
+         * Le mot dans la boite à recherche sera ajouté à la liste
+         * @param e
+         */
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -97,27 +107,25 @@ public class Dictio extends JFrame{
 
         searchBox.addKeyListener(new KeyListener() {
             @Override
+            /**
+             * Fonction qui prend le KeyEvent quand une lettre est ajouté dans la bar de recherche
+             * @param e
+             */
             public void keyTyped(KeyEvent e) {
 
             }
 
             @Override
+            /**
+             * Fonction qui prend le KeyEvent quand la touche du clavier est cliqué dans la bar de recherche
+             * @param e
+             */
             public void keyPressed(KeyEvent e) {
-                String searchWord = searchBox.getText();
-
-                for (int i = 0; i < words.size(); i++ ){
-                    if (words.get(i).toLowerCase().contains(searchWord.toLowerCase())){
-                        foundWordList.add(words.get(i));
-
-                    }
-                }
-
-                DefaultListModel model = new DefaultListModel();
-                model.addAll(foundWordList);
-                foundWords.setModel(model);
-                foundWords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             }
-
+            /**
+             * Fonction qui prend le KeyEvent quand la touche du clavier est remonté dans la bar de recherche
+             * @param e
+             */
             @Override
             public void keyReleased(KeyEvent e) {
                 foundWordList.clear();
@@ -139,6 +147,10 @@ public class Dictio extends JFrame{
 
         foundWords.addListSelectionListener(new ListSelectionListener() {
             @Override
+            /**
+             * Fonction qui prend le ListSelectionEvent quand un élément de la liste a été selectionné
+             * @param e
+             */
             public void valueChanged(ListSelectionEvent e) {
 //
 //                System.out.println(foundWords.getSelectedValue());
@@ -155,6 +167,10 @@ public class Dictio extends JFrame{
 
         saveBtn.addActionListener(new ActionListener() {
             @Override
+            /**
+             * Fonction qui prend le ActionListener qunad le boutton "charger" est cliqué
+             * @param e
+             */
             public void actionPerformed(ActionEvent e) {
                 try {
                     PrintWriter writer= new PrintWriter(new File("D:\\dictio.txt"));
