@@ -68,19 +68,26 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="23b8a" class="javax.swing.JList" binding="allWordList">
+          <scrollpane id="30b6">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="50"/>
-              </grid>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <model/>
+              <horizontalScrollBarPolicy value="30"/>
             </properties>
-            <clientProperties>
-              <List.isFileList class="java.lang.Boolean" value="false"/>
-            </clientProperties>
-          </component>
+            <border type="none"/>
+            <children>
+              <component id="23b8a" class="javax.swing.JList" binding="allWordList">
+                <constraints/>
+                <properties>
+                  <model/>
+                </properties>
+                <clientProperties>
+                  <List.isFileList class="java.lang.Boolean" value="false"/>
+                </clientProperties>
+              </component>
+            </children>
+          </scrollpane>
         </children>
       </grid>
       <component id="4711d" class="javax.swing.JScrollBar" binding="scrollBar">
