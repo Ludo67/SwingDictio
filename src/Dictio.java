@@ -4,8 +4,6 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,15 +14,14 @@ import java.util.Scanner;
 public class Dictio extends JFrame{
     private JTextField searchBox;
     private JPanel dictioPanel;
-    private JLabel description;
     private JButton loadBtn;
     private JButton saveBtn;
     private JButton addBtn;
     private JPanel btnPanel;
     private JList allWordList;
     private JPanel wordPanel;
-    private JScrollBar scrollBar;
     private JList foundWords;
+    private JTextArea description;
     private static File[] files;
     private static ArrayList<String> lines = new ArrayList<String>();
     private static ArrayList<String> words = new ArrayList<String>();
@@ -69,7 +66,8 @@ public class Dictio extends JFrame{
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                var word = JOptionPane.showInputDialog("Entrer un nouveau nom");
+                String word = searchBox.getText();
+                String definition = description.getText();
                 char[] chars = word.toCharArray();
                 int count = 0;
 
@@ -86,7 +84,7 @@ public class Dictio extends JFrame{
 
                 if(count==0) {
                     words.add(word);
-                    definitions.add("test");
+                    definitions.add(definition);
                     DefaultListModel model = (DefaultListModel) allWordList.getModel();
                     model.addElement(word);
                     allWordList.setModel(model);
