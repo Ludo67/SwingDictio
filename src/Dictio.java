@@ -6,21 +6,21 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Dictio extends JFrame{
     private JTextField searchBox;
     private JPanel dictioPanel;
-    private JLabel description;
     private JButton loadBtn;
     private JButton saveBtn;
     private JButton addBtn;
     private JPanel btnPanel;
     private JList allWordList;
     private JPanel wordPanel;
-    private JScrollBar scrollBar;
     private JList foundWords;
+    private JTextArea description;
     private static File[] files;
     private static ArrayList<String> lines = new ArrayList<String>();
     private static ArrayList<String> words = new ArrayList<String>();
@@ -65,7 +65,8 @@ public class Dictio extends JFrame{
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                var word = JOptionPane.showInputDialog("Entrer un nouveau nom");
+                String word = searchBox.getText();
+                String definition = description.getText();
                 char[] chars = word.toCharArray();
                 int count = 0;
 
@@ -82,6 +83,7 @@ public class Dictio extends JFrame{
 
                 if(count==0) {
                     words.add(word);
+                    definitions.add(definition);
                     DefaultListModel model = (DefaultListModel) allWordList.getModel();
                     model.addElement(word);
                     allWordList.setModel(model);
@@ -89,12 +91,6 @@ public class Dictio extends JFrame{
                 else{
                     JOptionPane.showMessageDialog(dictioPanel,"Invalid word. Only letters are allowed");
                 }
-            }
-        });
-        scrollBar.addAdjustmentListener(new AdjustmentListener() {
-            @Override
-            public void adjustmentValueChanged(AdjustmentEvent e) {
-                System.out.println(scrollBar.getValue());
             }
         });
 
@@ -156,6 +152,26 @@ public class Dictio extends JFrame{
             }
         });
 
+        saveBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    PrintWriter writer= new PrintWriter(new File("D:\\dictio.txt"));
+
+                    String[] wordsArrays = words.toArray(new String[0]);
+
+                    for(int i=0; i<wordsArrays.length; i++){
+                        writer.write(words.get(i) + " & " + definitions.get(i) + "\n");
+                    }
+
+                    writer.flush();
+                    writer.close();
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
     }
 
     public static void main(String[] args) throws IOException {
