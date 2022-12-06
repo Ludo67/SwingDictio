@@ -21,6 +21,7 @@ public class Dictio extends JFrame{
     private JPanel wordPanel;
     private JList foundWords;
     private JTextArea description;
+    private JLabel nothing;
     private static File[] files;
     private static ArrayList<String> lines = new ArrayList<String>();
     private static ArrayList<String> words = new ArrayList<String>();
