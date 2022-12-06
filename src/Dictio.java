@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Dictio extends JFrame{
-    private JTextField textField1;
+    private JTextField searchBox;
     private JPanel dictioPanel;
     private JLabel description;
     private JButton loadBtn;
@@ -21,10 +23,12 @@ public class Dictio extends JFrame{
     private JList allWordList;
     private JPanel wordPanel;
     private JScrollBar scrollBar;
+    private JList foundWords;
     private static File[] files;
     private static ArrayList<String> lines = new ArrayList<String>();
     private static ArrayList<String> words = new ArrayList<String>();
     private static ArrayList<String> definitions = new ArrayList<String>();
+    private ArrayList<String> foundWordList = new ArrayList<>();
 
     public Dictio() {
         loadBtn.addActionListener(new ActionListener() {
@@ -96,6 +100,42 @@ public class Dictio extends JFrame{
                 System.out.println(scrollBar.getValue());
             }
         });
+
+        searchBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchWord = searchBox.getText();
+
+                for (int i = 0; i < words.size(); i++ ){
+                    if (words.get(i).toLowerCase().contains(searchWord.toLowerCase())){
+                        foundWordList.add(words.get(i));
+
+                    }
+                }
+
+                DefaultListModel model = new DefaultListModel();
+                model.addAll(foundWordList);
+                foundWords.setModel(model);
+                foundWords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            }
+        });
+
+        foundWords.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+//
+//                System.out.println(foundWords.getSelectedValue());
+                int indexInListOfWords = 0;
+                for (int i = 0; i < words.size(); i++){
+                    if (words.get(i).toLowerCase().equals(foundWords.getSelectedValue())){
+                        indexInListOfWords = i;
+                    }
+
+                }
+                description.setText(definitions.get(indexInListOfWords));
+            }
+        });
+
     }
 
     public static void main(String[] args) throws IOException {
@@ -105,5 +145,9 @@ public class Dictio extends JFrame{
         d.setSize(900, 400);
         d.setVisible(true);
         d.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }
