@@ -10,24 +10,64 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Class that extends JFrame containing all the elements in the Dictio.form.
+ * Contains also actions that can be performed by the user.
+ */
 public class Dictio extends JFrame{
+    /**
+     * Boite de recherche
+     */
     private JTextField searchBox;
     private JPanel dictioPanel;
+    /**
+     * Boutton pour charger les donnees
+     */
     private JButton loadBtn;
+    /**
+     * Boutton pour sauvegarder
+     */
     private JButton saveBtn;
+    /**
+     * Boutton pour ajouter les donnees
+     */
     private JButton addBtn;
     private JPanel btnPanel;
+    /**
+     * List de tout les mots
+     */
     private JList allWordList;
     private JPanel wordPanel;
+    /**
+     * Liste des mots trouvés
+     */
     private JList foundWords;
+    /**
+     * Boite de texte pour definition
+     */
     private JTextArea description;
     private JLabel nothing;
     private static File[] files;
+    /**
+     * Array List pour les données ajoutées
+     */
     private static ArrayList<String> lines = new ArrayList<String>();
+    /**
+     * Array List pour les mots
+     */
     private static ArrayList<String> words = new ArrayList<String>();
+    /**
+     * Array List pour les definitions
+     */
     private static ArrayList<String> definitions = new ArrayList<String>();
+    /**
+     * Array List pour les mots trouvés après la recherche
+     */
     private ArrayList<String> foundWordList = new ArrayList<>();
 
+    /**
+     * Class that contains all the actions for the buttons
+     */
     public Dictio() {
         loadBtn.addActionListener(new ActionListener() {
             @Override
@@ -166,11 +206,11 @@ public class Dictio extends JFrame{
         });
 
         saveBtn.addActionListener(new ActionListener() {
-            @Override
             /**
              * Fonction qui prend le ActionListener qunad le boutton "charger" est cliqué
              * @param e
              */
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     PrintWriter writer= new PrintWriter(new File("D:\\dictio.txt"));
