@@ -141,7 +141,7 @@ public class Dictio extends JFrame{
                             indexOfWord = i;
                         }
                     }
-                    System.out.println(wordFound);
+
                     if (wordFound){
                         definitions.set(indexOfWord, definition);
                     }
