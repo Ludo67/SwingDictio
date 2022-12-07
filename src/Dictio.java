@@ -152,7 +152,7 @@ public class Dictio extends JFrame{
              * @param e
              */
             public void keyTyped(KeyEvent e) {
-                SearchWord();
+//                SearchWord();
             }
 
             @Override
@@ -161,7 +161,7 @@ public class Dictio extends JFrame{
              * @param e
              */
             public void keyPressed(KeyEvent e) {
-                SearchWord();
+//                SearchWord();
             }
             /**
              * Fonction qui prend le KeyEvent quand la touche du clavier est remonté dans la bar de recherche
@@ -169,7 +169,8 @@ public class Dictio extends JFrame{
              */
             @Override
             public void keyReleased(KeyEvent e) {
-                SearchWord();
+                String searchWord = searchBox.getText();
+                SearchWord(searchWord);
             }
 
         });
@@ -233,22 +234,20 @@ public class Dictio extends JFrame{
         // TODO: place custom component creation code here
     }
 
-    private void SearchWord(){
+    /**
+     * Fonction qui cherche le mot dans le searchBox
+     * @param searchWord Le mot recherché
+     */
+    private void SearchWord(String searchWord){
         foundWordList.clear();
-        String searchWord = searchBox.getText();
-        int indexInListOfWords = 0;
         boolean hasMatch = false;
         for (int i = 0; i < words.size(); i++ ){
-            if(words.get(i).toLowerCase().trim().equals(searchWord.toLowerCase().trim())){
-                if (!hasMatch){
-                    description.setText(definitions.get(i));
-                }
+            if(words.get(i).toLowerCase().trim().equals(searchWord.toLowerCase().trim()) && !hasMatch){
+                description.setText(definitions.get(i));
                 hasMatch = true;
             }
-            else{
-                if (!hasMatch){
-                    description.setText(" ");
-                }
+            else if (!hasMatch){
+                description.setText(" ");
 
             }
             if (words.get(i).toLowerCase().trim().contains(searchWord.toLowerCase().trim())){
