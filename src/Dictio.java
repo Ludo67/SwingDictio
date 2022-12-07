@@ -119,6 +119,7 @@ public class Dictio extends JFrame{
                 String word = searchBox.getText();
                 String definition = description.getText();
                 char[] chars = word.toCharArray();
+
                 int count = 0;
 
                 for(char c : chars){
@@ -131,13 +132,26 @@ public class Dictio extends JFrame{
                         count++;
                     }
                 }
-
+                boolean wordFound = false;
+                int indexOfWord = 0;
                 if(count==0) {
-                    words.add(word.trim());
-                    definitions.add(definition);
-                    DefaultListModel model = (DefaultListModel) allWordList.getModel();
-                    model.addElement(word);
-                    allWordList.setModel(model);
+                    for (int i = 0; i < words.size(); i++){
+                        if (word.trim().equals(words.get(i).trim()) && !wordFound){
+                            wordFound = true;
+                            indexOfWord = i;
+                        }
+                    }
+                    System.out.println(wordFound);
+                    if (wordFound){
+                        definitions.set(indexOfWord, definition);
+                    }
+                    else{
+                        words.add(word.trim());
+                        definitions.add(definition);
+                        DefaultListModel model = (DefaultListModel) allWordList.getModel();
+                        model.addElement(word);
+                        allWordList.setModel(model);
+                    }
                 }
                 else{
                     JOptionPane.showMessageDialog(dictioPanel,"Invalid word. Only letters are allowed");
@@ -199,6 +213,7 @@ public class Dictio extends JFrame{
             /**
              * Fonction qui prend le ActionListener qunad le boutton "charger" est cliqué
              * @param e
+             * @throws FileNotFoundException when file is not found
              */
             @Override
             public void actionPerformed(ActionEvent e) {
