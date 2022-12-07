@@ -14,7 +14,7 @@ import java.util.Scanner;
  * Class that extends JFrame containing all the elements in the Dictio.form.
  * Contains also actions that can be performed by the user.
  */
-public class Dictio extends JFrame{
+public class Dictio extends JFrame implements DictioInterface{
     /**
      * Boite de recherche
      */
@@ -71,91 +71,16 @@ public class Dictio extends JFrame{
     public Dictio() {
         loadBtn.addActionListener(new ActionListener() {
             @Override
-            /**
-             * Fonction qui prend le ActionEvent quand le boutton Ajouter est actioné.
-             * Elle ouvrira une fenetre qui demande à l'utilisateur de selectionner un fichier txt.
-             * @param e
-             */
             public void actionPerformed(ActionEvent e) {
-                FileDialog fd = new FileDialog(new JFrame());
-                fd.setVisible(true);
-                files = fd.getFiles();
-
-                Scanner reader = null;
-                try {
-                    reader = new Scanner(files[0]);
-                } catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
-                }
-
-                while (reader.hasNextLine()){
-                    String line = reader.nextLine();
-                    lines.add(line);
-                }
-
-                for(String elem: lines) {
-                    String[] result = elem.split("&", 2);
-                    words.add(result[0].toLowerCase());
-                    definitions.add(result[1]);
-                }
-
-                ArrayList<String> wordList = new ArrayList<>();
-                wordList.addAll(words);
-
-                DefaultListModel model = new DefaultListModel();
-                model.addAll(words);
-                allWordList.setModel(model);
-                reader.close();
+                OpenDataInFileAndSaveAsList();
             }
         });
-        /**
-         * Fonction qui prend un ActionEvent puis ajoute un mot après que l'utilisateur clique sur le bouton ajouter/modifier
-         * Le mot dans la boite à recherche sera ajouté à la liste
-         * @param e
-         */
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String word = searchBox.getText();
                 String definition = description.getText();
-                char[] chars = word.toCharArray();
-
-                int count = 0;
-
-                for(char c : chars){
-                    if(Character.isDigit(c) || !Character.isAlphabetic(c) || Character.isWhitespace(c)){
-                        try {
-                            throw new Exception("Invalid word. Only letters are allowed");
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                        count++;
-                    }
-                }
-                boolean wordFound = false;
-                int indexOfWord = 0;
-                if(count==0) {
-                    for (int i = 0; i < words.size(); i++){
-                        if (word.trim().equals(words.get(i).trim()) && !wordFound){
-                            wordFound = true;
-                            indexOfWord = i;
-                        }
-                    }
-
-                    if (wordFound){
-                        definitions.set(indexOfWord, definition);
-                    }
-                    else{
-                        words.add(word.trim());
-                        definitions.add(definition);
-                        DefaultListModel model = (DefaultListModel) allWordList.getModel();
-                        model.addElement(word);
-                        allWordList.setModel(model);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(dictioPanel,"Invalid word. Only letters are allowed");
-                }
+                AddWord(word, definition);
             }
         });
 
@@ -191,46 +116,15 @@ public class Dictio extends JFrame{
 
         foundWords.addListSelectionListener(new ListSelectionListener() {
             @Override
-            /**
-             * Fonction qui prend le ListSelectionEvent quand un élément de la liste a été selectionné
-             * @param e
-             */
             public void valueChanged(ListSelectionEvent e) {
-//
-//                System.out.println(foundWords.getSelectedValue());
-                int indexInListOfWords = 0;
-                for (int i = 0; i < words.size(); i++){
-                    if (words.get(i).toLowerCase().equals(foundWords.getSelectedValue())){
-                        indexInListOfWords = i;
-                    }
-
-                }
-                description.setText(definitions.get(indexInListOfWords));
+                DisplayWordDefinitionWhenWordSelected();
             }
         });
 
         saveBtn.addActionListener(new ActionListener() {
-            /**
-             * Fonction qui prend le ActionListener qunad le boutton "charger" est cliqué
-             * @param e
-             * @throws FileNotFoundException when file is not found
-             */
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    PrintWriter writer= new PrintWriter(new File("D:\\dictio.txt"));
-
-                    String[] wordsArrays = words.toArray(new String[0]);
-
-                    for(int i=0; i<wordsArrays.length; i++){
-                        writer.write(words.get(i) + " & " + definitions.get(i) + "\n");
-                    }
-
-                    writer.flush();
-                    writer.close();
-                } catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
-                }
+                SaveAsDocumemnt();
 
             }
         });
@@ -253,7 +147,7 @@ public class Dictio extends JFrame{
      * Fonction qui cherche le mot dans le searchBox
      * @param searchWord Le mot recherché
      */
-    private void SearchWord(String searchWord){
+    public void SearchWord(String searchWord){
         foundWordList.clear();
         boolean hasMatch = false;
         for (int i = 0; i < words.size(); i++ ){
@@ -275,6 +169,126 @@ public class Dictio extends JFrame{
         model.addAll(foundWordList);
         foundWords.setModel(model);
         foundWords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+
+    /**
+     * Fonction qui prend un "word" et une "definition", puis regarde s'il existe deja. Si oui, il sera mis a jour. Sinon, il sera ajoute
+     * @param word String
+     * @param definition String
+     * @throws Exception invalid word
+     */
+    @Override
+    public void AddWord(String word, String definition) {
+        char[] chars = word.toCharArray();
+
+        int count = 0;
+
+        for(char c : chars){
+            if(Character.isDigit(c) || !Character.isAlphabetic(c) || Character.isWhitespace(c)){
+                try {
+                    throw new Exception("Invalid word. Only letters are allowed");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                count++;
+            }
+        }
+        boolean wordFound = false;
+        int indexOfWord = 0;
+        if(count==0) {
+            for (int i = 0; i < words.size(); i++){
+                if (word.trim().equals(words.get(i).trim()) && !wordFound){
+                    wordFound = true;
+                    indexOfWord = i;
+                }
+            }
+
+            if (wordFound){
+                definitions.set(indexOfWord, definition);
+            }
+            else{
+                words.add(word.trim());
+                definitions.add(definition);
+                DefaultListModel model = (DefaultListModel) allWordList.getModel();
+                model.addElement(word);
+                allWordList.setModel(model);
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(dictioPanel,"Invalid word. Only letters are allowed");
+        }
+    }
+    /**
+     * Fonction qui sauvegarde le document
+     * @throws FileNotFoundException when file is not found
+     */
+    @Override
+    public void SaveAsDocumemnt() {
+        try {
+            PrintWriter writer= new PrintWriter(new File("D:\\dictio.txt"));
+
+            String[] wordsArrays = words.toArray(new String[0]);
+
+            for(int i=0; i<wordsArrays.length; i++){
+                writer.write(words.get(i) + " & " + definitions.get(i) + "\n");
+            }
+
+            writer.flush();
+            writer.close();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Fonction qui montre la definition quand le mot dans la liste de recherche est selectionee
+     */
+    @Override
+    public void DisplayWordDefinitionWhenWordSelected() {
+        int indexInListOfWords = 0;
+        for (int i = 0; i < words.size(); i++){
+            if (words.get(i).toLowerCase().equals(foundWords.getSelectedValue())){
+                indexInListOfWords = i;
+            }
+
+        }
+        description.setText(definitions.get(indexInListOfWords));
+    }
+
+    /**
+     * Ouvre le fichier selectionné et ajoute les definitions et mots au liste respective
+     */
+    @Override
+    public void OpenDataInFileAndSaveAsList() {
+        FileDialog fd = new FileDialog(new JFrame());
+        fd.setVisible(true);
+        files = fd.getFiles();
+
+        Scanner reader = null;
+        try {
+            reader = new Scanner(files[0]);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+
+        while (reader.hasNextLine()){
+            String line = reader.nextLine();
+            lines.add(line);
+        }
+
+        for(String elem: lines) {
+            String[] result = elem.split("&", 2);
+            words.add(result[0].toLowerCase());
+            definitions.add(result[1]);
+        }
+
+        ArrayList<String> wordList = new ArrayList<>();
+        wordList.addAll(words);
+
+        DefaultListModel model = new DefaultListModel();
+        model.addAll(words);
+        allWordList.setModel(model);
+        reader.close();
     }
 
 }
