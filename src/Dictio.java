@@ -133,7 +133,7 @@ public class Dictio extends JFrame{
                 }
 
                 if(count==0) {
-                    words.add(word);
+                    words.add(word.trim());
                     definitions.add(definition);
                     DefaultListModel model = (DefaultListModel) allWordList.getModel();
                     model.addElement(word);
@@ -152,7 +152,7 @@ public class Dictio extends JFrame{
              * @param e
              */
             public void keyTyped(KeyEvent e) {
-
+                SearchWord();
             }
 
             @Override
@@ -161,6 +161,7 @@ public class Dictio extends JFrame{
              * @param e
              */
             public void keyPressed(KeyEvent e) {
+                SearchWord();
             }
             /**
              * Fonction qui prend le KeyEvent quand la touche du clavier est remonté dans la bar de recherche
@@ -168,19 +169,7 @@ public class Dictio extends JFrame{
              */
             @Override
             public void keyReleased(KeyEvent e) {
-                foundWordList.clear();
-                String searchWord = searchBox.getText();
-                for (int i = 0; i < words.size(); i++ ){
-                    if (words.get(i).toLowerCase().contains(searchWord.toLowerCase())){
-                        foundWordList.add(words.get(i));
-
-                    }
-                }
-
-                DefaultListModel model = new DefaultListModel();
-                model.addAll(foundWordList);
-                foundWords.setModel(model);
-                foundWords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                SearchWord();
             }
 
         });
@@ -243,4 +232,35 @@ public class Dictio extends JFrame{
     private void createUIComponents() {
         // TODO: place custom component creation code here
     }
+
+    private void SearchWord(){
+        foundWordList.clear();
+        String searchWord = searchBox.getText();
+        int indexInListOfWords = 0;
+        boolean hasMatch = false;
+        for (int i = 0; i < words.size(); i++ ){
+            if(words.get(i).toLowerCase().trim().equals(searchWord.toLowerCase().trim())){
+                if (!hasMatch){
+                    description.setText(definitions.get(i));
+                }
+                hasMatch = true;
+            }
+            else{
+                if (!hasMatch){
+                    description.setText(" ");
+                }
+
+            }
+            if (words.get(i).toLowerCase().trim().contains(searchWord.toLowerCase().trim())){
+                foundWordList.add(words.get(i));
+
+            }
+        }
+
+        DefaultListModel model = new DefaultListModel();
+        model.addAll(foundWordList);
+        foundWords.setModel(model);
+        foundWords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+
 }
