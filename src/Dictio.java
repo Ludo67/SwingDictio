@@ -226,15 +226,23 @@ public class Dictio extends JFrame implements DictioInterface{
     @Override
     public void SaveAsDocumemnt() {
         try {
-            PrintWriter writer= new PrintWriter(new File("D:\\dictio.txt"));
-            String[] wordsArrayUpdated = new String[wordsUpdated.size()];
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int option = fileChooser.showOpenDialog(new JFrame());
+            if(option == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
 
-            for(int i=0; i<wordsUpdated.size(); i++){
-                wordsArrayUpdated[i] = wordsUpdated.get(i).getWord() + " & " + wordsUpdated.get(i).getDefinition() + "\n";
+                PrintWriter writer = new PrintWriter(new File(file.getAbsolutePath() + "\\dictio.txt"));
+                String[] wordsArrayUpdated = new String[wordsUpdated.size()];
+
+                for (int i = 0; i < wordsUpdated.size(); i++) {
+                    wordsArrayUpdated[i] = wordsUpdated.get(i).getWord() + " & " + wordsUpdated.get(i).getDefinition() + "\n";
+                }
+
+                writer.flush();
+                writer.close();
+
             }
-
-            writer.flush();
-            writer.close();
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
