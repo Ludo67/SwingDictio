@@ -221,6 +221,7 @@ public class Dictio extends JFrame implements DictioInterface{
     }
     /**
      * Fonction qui sauvegarde le document
+     * Utilise JFileChooser
      * @throws FileNotFoundException when file is not found
      */
     @Override
@@ -250,6 +251,8 @@ public class Dictio extends JFrame implements DictioInterface{
 
     /**
      * Fonction qui montre la definition quand le mot dans la liste de recherche est selectionee
+     * Le personne peut selectionner de la liste complete ou la liste de recherche
+     * @param toLook type JList pour determiner la liste que vient le mot.
      */
     @Override
     public void DisplayWordDefinitionWhenWordSelected(JList toLook) {
