@@ -53,14 +53,6 @@ public class Dictio extends JFrame implements DictioInterface{
      */
     private static ArrayList<String> lines = new ArrayList<String>();
     /**
-     * Array List pour les mots
-     */
-    private static ArrayList<String> words = new ArrayList<String>();
-    /**
-     * Array List pour les definitions
-     */
-    private static ArrayList<String> definitions = new ArrayList<String>();
-    /**
      * Array List pour les mots trouvés après la recherche
      */
     private ArrayList<String> foundWordList = new ArrayList<>();
@@ -120,7 +112,7 @@ public class Dictio extends JFrame implements DictioInterface{
         foundWords.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                DisplayWordDefinitionWhenWordSelected();
+                DisplayWordDefinitionWhenWordSelected(foundWords);
             }
         });
 
@@ -129,6 +121,13 @@ public class Dictio extends JFrame implements DictioInterface{
             public void actionPerformed(ActionEvent e) {
                 SaveAsDocumemnt();
 
+            }
+        });
+
+        allWordList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                DisplayWordDefinitionWhenWordSelected(allWordList);
             }
         });
     }
@@ -151,25 +150,24 @@ public class Dictio extends JFrame implements DictioInterface{
      * @param searchWord Le mot recherché
      */
     public void SearchWord(String searchWord){
-        foundWordList.clear();
         boolean hasMatch = false;
-        for (int i = 0; i < words.size(); i++ ){
-            if(words.get(i).toLowerCase().trim().equals(searchWord.toLowerCase().trim()) && !hasMatch){
-                description.setText(definitions.get(i));
+        DefaultListModel model = new DefaultListModel();
+        ArrayList<String> searchList = new ArrayList<>();
+        for (int i = 0; i < wordsUpdated.size(); i++ ){
+            if(wordsUpdated.get(i).getWord().toLowerCase().trim().equals(searchWord.toLowerCase().trim()) && !hasMatch){
+                description.setText(wordsUpdated.get(i).getDefinition());
                 hasMatch = true;
             }
             else if (!hasMatch){
                 description.setText(" ");
 
             }
-            if (words.get(i).toLowerCase().trim().contains(searchWord.toLowerCase().trim())){
-                foundWordList.add(words.get(i));
+            if (wordsUpdated.get(i).getWord().toLowerCase().trim().contains(searchWord.toLowerCase().trim())){
+                searchList.add(wordsUpdated.get(i).getWord());
 
             }
         }
-
-        DefaultListModel model = new DefaultListModel();
-        model.addAll(foundWordList);
+        model.addAll(searchList);
         foundWords.setModel(model);
         foundWords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
@@ -183,7 +181,8 @@ public class Dictio extends JFrame implements DictioInterface{
     @Override
     public void AddWord(String word, String definition) {
         char[] chars = word.toCharArray();
-
+        boolean wordFound = false;
+        int indexOfWord = 0;
         int count = 0;
 
         for(char c : chars){
@@ -196,40 +195,24 @@ public class Dictio extends JFrame implements DictioInterface{
                 count++;
             }
         }
-        boolean wordFound = false;
-        int indexOfWord = 0;
+
         if(count==0) {
-            for (int i = 0; i < words.size(); i++){
-                if (word.trim().equals(words.get(i).trim()) && !wordFound){
+            for (int i = 0; i < wordsUpdated.size(); i++){
+                if (word.trim().equals(wordsUpdated.get(i).getWord().trim()) && !wordFound){
                     wordFound = true;
                     indexOfWord = i;
                 }
-
-                //---
-//                if (word.trim().equals(wordsUpdated.get(i).getWord().trim()) && !wordFound){
-//                    wordFound = true;
-//                    indexOfWord = i;
-//                }
             }
 
             if (wordFound){
-                definitions.set(indexOfWord, definition);
-                //--
-//                wordsUpdated.get(indexOfWord).setDefinition(definition);
+                wordsUpdated.get(indexOfWord).setDefinition(definition);
             }
             else{
-                words.add(word.trim());
-                definitions.add(definition);
-                DefaultListModel model = (DefaultListModel) allWordList.getModel();
-                model.addElement(word);
-                allWordList.setModel(model);
-
-                //--
-//                Word newWord = new Word(word.trim(), definition);
-//                wordsUpdated.add(newWord);
-//                DefaultListModel modelUpdated = (DefaultListModel) allWordList.getModel();
-//                modelUpdated.addElement(newWord);
-//                allWordList.setModel(modelUpdated);
+                Word newWord = new Word(word.trim(), definition);
+                wordsUpdated.add(newWord);
+                DefaultListModel modelUpdated = (DefaultListModel) allWordList.getModel();
+                modelUpdated.addElement(newWord.getWord());
+                allWordList.setModel(modelUpdated);
             }
         }
         else{
@@ -244,21 +227,12 @@ public class Dictio extends JFrame implements DictioInterface{
     public void SaveAsDocumemnt() {
         try {
             PrintWriter writer= new PrintWriter(new File("D:\\dictio.txt"));
+            String[] wordsArrayUpdated = new String[wordsUpdated.size()];
 
-            String[] wordsArrays = words.toArray(new String[0]);
-
-            for(int i=0; i<wordsArrays.length; i++){
-                writer.write(words.get(i) + " & " + definitions.get(i) + "\n");
+            for(int i=0; i<wordsUpdated.size(); i++){
+                wordsArrayUpdated[i] = wordsUpdated.get(i).getWord() + " & " + wordsUpdated.get(i).getDefinition() + "\n";
             }
 
-            //----
-//            String[] wordsArrayUpdated = new String[wordsUpdated.size()];
-//
-//            for(int i=0; i<wordsUpdated.size(); i++){
-//                wordsArrayUpdated[i] = wordsUpdated.get(i).getWord() + " & " + wordsUpdated.get(i).getDefinition() + "\n";
-//            }
-
-            //----
             writer.flush();
             writer.close();
         } catch (FileNotFoundException ex) {
@@ -270,25 +244,15 @@ public class Dictio extends JFrame implements DictioInterface{
      * Fonction qui montre la definition quand le mot dans la liste de recherche est selectionee
      */
     @Override
-    public void DisplayWordDefinitionWhenWordSelected() {
+    public void DisplayWordDefinitionWhenWordSelected(JList toLook) {
         int indexInListOfWords = 0;
-        for (int i = 0; i < words.size(); i++){
-            if (words.get(i).toLowerCase().equals(foundWords.getSelectedValue())){
+        for (int i = 0; i < wordsUpdated.size(); i++){
+            if(wordsUpdated.get(i).getWord().toLowerCase().equals(toLook.getSelectedValue())){
                 indexInListOfWords = i;
             }
 
-            //---
-//
-//            if(wordsUpdated.get(i).getWord().toLowerCase().equals(foundWords.getSelectedValue())){
-//                indexInListOfWords = i;
-//            }
-
         }
-        description.setText(definitions.get(indexInListOfWords));
-
-        //----
-
-//        description.setText(wordsUpdated.get(indexInListOfWords).getDefinition());
+        description.setText(wordsUpdated.get(indexInListOfWords).getDefinition());
     }
 
     /**
@@ -312,26 +276,19 @@ public class Dictio extends JFrame implements DictioInterface{
             lines.add(line);
         }
 
+        ArrayList<String> wordList = new ArrayList<>();
         for(String elem: lines) {
             String[] result = elem.split("&", 2);
-            words.add(result[0].toLowerCase());
-            definitions.add(result[1]);
-            //------
-//            Word word = new Word(result[0].toLowerCase(), result[1]);
-//            wordsUpdated.add(word);
+            Word word = new Word(result[0].toLowerCase(), result[1]);
+            wordsUpdated.add(word);
+
+            wordList.add(result[0].toLowerCase());
         }
 
-        ArrayList<String> wordList = new ArrayList<>();
-        wordList.addAll(words);
-
         DefaultListModel model = new DefaultListModel();
-        model.addAll(words);
+        model.addAll(wordList);
         allWordList.setModel(model);
-
-        //-----
-//        model.addAll(wordsUpdated);
-//        allWordList.setModel(model);
-//        reader.close();
+        reader.close();
     }
 
 }

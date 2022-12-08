@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.util.ArrayList;
+
 public interface DictioInterface {
 
     public void SearchWord(String searchWord);
@@ -6,7 +9,7 @@ public interface DictioInterface {
 
     public void SaveAsDocumemnt();
 
-    public void DisplayWordDefinitionWhenWordSelected();
+    public void DisplayWordDefinitionWhenWordSelected(JList toLook);
 
     public void OpenDataInFileAndSaveAsList();
 }
