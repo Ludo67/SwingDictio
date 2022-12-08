@@ -34,7 +34,7 @@ public class Dictio extends JFrame implements DictioInterface{
     private JButton addBtn;
     private JPanel btnPanel;
     /**
-     * List de tout les mots
+     * List de tous les mots
      */
     private JList allWordList;
     private JPanel wordPanel;
@@ -68,6 +68,9 @@ public class Dictio extends JFrame implements DictioInterface{
     /**
      * Class that contains all the actions for the buttons
      */
+
+    private ArrayList<Word> wordsUpdated = new ArrayList<>();
+
     public Dictio() {
         loadBtn.addActionListener(new ActionListener() {
             @Override
@@ -201,10 +204,18 @@ public class Dictio extends JFrame implements DictioInterface{
                     wordFound = true;
                     indexOfWord = i;
                 }
+
+                //---
+//                if (word.trim().equals(wordsUpdated.get(i).getWord().trim()) && !wordFound){
+//                    wordFound = true;
+//                    indexOfWord = i;
+//                }
             }
 
             if (wordFound){
                 definitions.set(indexOfWord, definition);
+                //--
+//                wordsUpdated.get(indexOfWord).setDefinition(definition);
             }
             else{
                 words.add(word.trim());
@@ -212,6 +223,13 @@ public class Dictio extends JFrame implements DictioInterface{
                 DefaultListModel model = (DefaultListModel) allWordList.getModel();
                 model.addElement(word);
                 allWordList.setModel(model);
+
+                //--
+//                Word newWord = new Word(word.trim(), definition);
+//                wordsUpdated.add(newWord);
+//                DefaultListModel modelUpdated = (DefaultListModel) allWordList.getModel();
+//                modelUpdated.addElement(newWord);
+//                allWordList.setModel(modelUpdated);
             }
         }
         else{
@@ -233,6 +251,14 @@ public class Dictio extends JFrame implements DictioInterface{
                 writer.write(words.get(i) + " & " + definitions.get(i) + "\n");
             }
 
+            //----
+//            String[] wordsArrayUpdated = new String[wordsUpdated.size()];
+//
+//            for(int i=0; i<wordsUpdated.size(); i++){
+//                wordsArrayUpdated[i] = wordsUpdated.get(i).getWord() + " & " + wordsUpdated.get(i).getDefinition() + "\n";
+//            }
+
+            //----
             writer.flush();
             writer.close();
         } catch (FileNotFoundException ex) {
@@ -251,8 +277,18 @@ public class Dictio extends JFrame implements DictioInterface{
                 indexInListOfWords = i;
             }
 
+            //---
+//
+//            if(wordsUpdated.get(i).getWord().toLowerCase().equals(foundWords.getSelectedValue())){
+//                indexInListOfWords = i;
+//            }
+
         }
         description.setText(definitions.get(indexInListOfWords));
+
+        //----
+
+//        description.setText(wordsUpdated.get(indexInListOfWords).getDefinition());
     }
 
     /**
@@ -280,6 +316,9 @@ public class Dictio extends JFrame implements DictioInterface{
             String[] result = elem.split("&", 2);
             words.add(result[0].toLowerCase());
             definitions.add(result[1]);
+            //------
+//            Word word = new Word(result[0].toLowerCase(), result[1]);
+//            wordsUpdated.add(word);
         }
 
         ArrayList<String> wordList = new ArrayList<>();
@@ -288,7 +327,11 @@ public class Dictio extends JFrame implements DictioInterface{
         DefaultListModel model = new DefaultListModel();
         model.addAll(words);
         allWordList.setModel(model);
-        reader.close();
+
+        //-----
+//        model.addAll(wordsUpdated);
+//        allWordList.setModel(model);
+//        reader.close();
     }
 
 }
