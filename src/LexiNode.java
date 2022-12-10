@@ -110,7 +110,6 @@ public class LexiNode extends JFrame implements DictioInterface{
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 lastSelectedWord = wordsUpdated.get(GetWordIndex(foundWords)).getWord();
-                System.out.println(lastSelectedWord);
                 description.setText(wordsUpdated.get(GetWordIndex(foundWords)).getDefinition());
             }
         });
@@ -126,7 +125,6 @@ public class LexiNode extends JFrame implements DictioInterface{
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 lastSelectedWord = wordsUpdated.get(GetWordIndex(allWordList)).getWord();
-                System.out.println(lastSelectedWord);
                 description.setText(wordsUpdated.get(GetWordIndex(allWordList)).getDefinition());
             }
         });
@@ -180,6 +178,7 @@ public class LexiNode extends JFrame implements DictioInterface{
      * Pour modifier, il faut avoir le mot exact dans le champ de recherche.
      * @param word String
      * @param definition String
+     * @throws InvalidWordException
      */
     @Override
     public void AddWord(String word, String definition) {
@@ -201,7 +200,7 @@ public class LexiNode extends JFrame implements DictioInterface{
         }catch (InvalidWordException ex) {
             ex.printStackTrace();
         }
-        System.out.println(count);
+
         if(count==0) {
             for (int i = 0; i < wordsUpdated.size(); i++){
                 if (word.trim().equals(wordsUpdated.get(i).getWord().trim()) && !wordFound){
