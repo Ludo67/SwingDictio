@@ -120,7 +120,7 @@ public class LexiNode extends JFrame implements DictioInterface{
         allWordList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                description.setText(wordsUpdated.get(GetWordIndex(foundWords)).getDefinition());
+                description.setText(wordsUpdated.get(GetWordIndex(allWordList)).getDefinition());
             }
         });
     }
