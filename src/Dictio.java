@@ -142,6 +142,7 @@ public class Dictio extends JFrame implements DictioInterface{
      * Fonction qui cherche le mot dans le searchBox
      * @param searchWord Le mot recherché
      * @return searchList ArrayList of string
+     * Complexité = n
      */
     @Override
     public ArrayList<String> SearchWord(String searchWord){
@@ -246,7 +247,6 @@ public class Dictio extends JFrame implements DictioInterface{
      * Fonction qui montre la definition quand le mot dans la liste de recherche est selectionee
      * Le personne peut selectionner de la liste complete ou la liste de recherche
      * @param toLook type JList pour determiner la liste que vient le mot.
-     * @return indexInListOfWords int
      */
     @Override
     public int GetWordIndex(JList toLook) {

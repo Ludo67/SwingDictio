@@ -10,13 +10,10 @@ import static org.junit.Assert.assertNull;
 
 public class DictionUnitTest {
 
-    private Word word1;
-    private Word word2;
     private Dictio dictio1;
 
     @Before
     public void setUp() throws Exception {
-
         dictio1 = new Dictio();
         dictio1.AddWord("Word", "Definition");
         dictio1.AddWord("Wordledydumb", "Definition is long as well");
