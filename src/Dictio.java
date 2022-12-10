@@ -61,7 +61,7 @@ public class Dictio extends JFrame implements DictioInterface{
      * Class that contains all the actions for the buttons
      */
 
-    private ArrayList<Word> wordsUpdated = new ArrayList<>();
+    public ArrayList<Word> wordsUpdated = new ArrayList<>();
 
     public Dictio() {
         loadBtn.addActionListener(new ActionListener() {
@@ -81,30 +81,23 @@ public class Dictio extends JFrame implements DictioInterface{
 
         searchBox.addKeyListener(new KeyListener() {
             @Override
-            /**
-             * Fonction qui prend le KeyEvent quand une lettre est ajouté dans la bar de recherche
-             * @param e
-             */
             public void keyTyped(KeyEvent e) {
 //                SearchWord();
             }
 
             @Override
-            /**
-             * Fonction qui prend le KeyEvent quand la touche du clavier est cliqué dans la bar de recherche
-             * @param e
-             */
             public void keyPressed(KeyEvent e) {
 //                SearchWord();
             }
-            /**
-             * Fonction qui prend le KeyEvent quand la touche du clavier est remonté dans la bar de recherche
-             * @param e
-             */
+
             @Override
             public void keyReleased(KeyEvent e) {
                 String searchWord = searchBox.getText();
-                SearchWord(searchWord);
+                DefaultListModel model = new DefaultListModel();
+
+                model.addAll(SearchWord(searchWord));
+                foundWords.setModel(model);
+                foundWords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             }
 
         });
@@ -112,7 +105,7 @@ public class Dictio extends JFrame implements DictioInterface{
         foundWords.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                DisplayWordDefinitionWhenWordSelected(foundWords);
+                description.setText(wordsUpdated.get(GetWordIndex(foundWords)).getDefinition());
             }
         });
 
@@ -127,7 +120,7 @@ public class Dictio extends JFrame implements DictioInterface{
         allWordList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                DisplayWordDefinitionWhenWordSelected(allWordList);
+                description.setText(wordsUpdated.get(GetWordIndex(foundWords)).getDefinition());
             }
         });
     }
@@ -141,17 +134,17 @@ public class Dictio extends JFrame implements DictioInterface{
         d.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
+//    private void createUIComponents() {
+//        // TODO: place custom component creation code here
+//    }
 
     /**
      * Fonction qui cherche le mot dans le searchBox
      * @param searchWord Le mot recherché
      */
-    public void SearchWord(String searchWord){
+    @Override
+    public ArrayList<String> SearchWord(String searchWord){
         boolean hasMatch = false;
-        DefaultListModel model = new DefaultListModel();
         ArrayList<String> searchList = new ArrayList<>();
         for (int i = 0; i < wordsUpdated.size(); i++ ){
             if(wordsUpdated.get(i).getWord().toLowerCase().trim().equals(searchWord.toLowerCase().trim()) && !hasMatch){
@@ -167,9 +160,8 @@ public class Dictio extends JFrame implements DictioInterface{
 
             }
         }
-        model.addAll(searchList);
-        foundWords.setModel(model);
-        foundWords.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        return searchList;
     }
 
     /**
@@ -255,7 +247,7 @@ public class Dictio extends JFrame implements DictioInterface{
      * @param toLook type JList pour determiner la liste que vient le mot.
      */
     @Override
-    public void DisplayWordDefinitionWhenWordSelected(JList toLook) {
+    public int GetWordIndex(JList toLook) {
         int indexInListOfWords = 0;
         for (int i = 0; i < wordsUpdated.size(); i++){
             if(wordsUpdated.get(i).getWord().toLowerCase().equals(toLook.getSelectedValue())){
@@ -263,7 +255,7 @@ public class Dictio extends JFrame implements DictioInterface{
             }
 
         }
-        description.setText(wordsUpdated.get(indexInListOfWords).getDefinition());
+        return indexInListOfWords;
     }
 
     /**

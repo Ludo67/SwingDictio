@@ -2,6 +2,10 @@ public class Word {
     private String word;
     private String definition;
 
+    public Word() {
+
+    }
+
     public Word(String word, String definition) {
         this.word = word;
         this.definition = definition;
