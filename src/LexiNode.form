@@ -23,8 +23,8 @@
       </component>
       <component id="db3eb" class="javax.swing.JTextField" binding="searchBox">
         <constraints>
-          <grid row="1" column="0" row-span="2" col-span="1" vsize-policy="1" hsize-policy="1" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="179" height="30"/>
           </grid>
         </constraints>
         <properties/>
@@ -95,7 +95,9 @@
       </grid>
       <scrollpane id="e3a4">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="2" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="179" height="128"/>
+          </grid>
         </constraints>
         <properties/>
         <border type="none"/>
