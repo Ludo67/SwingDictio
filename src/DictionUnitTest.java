@@ -11,7 +11,9 @@ import static org.junit.Assert.assertNull;
 public class DictionUnitTest {
 
     private Dictio dictio1;
-
+    /**
+     *Set Up Word before every test
+     */
     @Before
     public void setUp() throws Exception {
         dictio1 = new Dictio();
@@ -19,6 +21,9 @@ public class DictionUnitTest {
         dictio1.AddWord("Wordledydumb", "Definition is long as well");
     }
 
+    /**
+     * Test Add Word
+     */
     @Test
     public void testAddWord(){
         ArrayList<String> List = new ArrayList<>();
@@ -28,6 +33,9 @@ public class DictionUnitTest {
         assertEquals("Definition", dictio1.wordsUpdated.get(index).getDefinition());
     }
 
+    /**
+     * Test Update an existing word
+     */
     @Test
     public void testUpdateDefinitionOfExistingWord(){
         ArrayList<String> List = new ArrayList<>();
@@ -38,6 +46,9 @@ public class DictionUnitTest {
         assertEquals("New Definition", dictio1.wordsUpdated.get(index).getDefinition());
     }
 
+    /**
+     * Test Get word index with word
+     */
     @Test
     public void TestGetWordIndex(){
         JList foundWord = new JList(dictio1.SearchWord("Word").toArray());
@@ -45,6 +56,9 @@ public class DictionUnitTest {
         assertEquals(0, dictio1.GetWordIndex(foundWord));
     }
 
+    /**
+     * Test search word
+     */
     @Test
     public void testSearchWord(){
         ArrayList<String> List = new ArrayList<>();
