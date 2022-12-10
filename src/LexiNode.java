@@ -58,11 +58,15 @@ public class LexiNode extends JFrame implements DictioInterface{
     private ArrayList<String> foundWordList = new ArrayList<>();
 
     /**
-     * Class that contains all the actions for the buttons
+     * Array List pour les mots
      */
-
     public ArrayList<Word> wordsUpdated = new ArrayList<>();
 
+    private String lastSelectedWord;
+
+    /**
+     * Class that contains all the actions for the buttons
+     */
     public LexiNode() {
         loadBtn.addActionListener(new ActionListener() {
             @Override
@@ -74,9 +78,8 @@ public class LexiNode extends JFrame implements DictioInterface{
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String word = searchBox.getText();
                 String definition = description.getText();
-                AddWord(word, definition);
+                AddWord(lastSelectedWord.toString(), definition);
             }
         });
 
@@ -106,6 +109,8 @@ public class LexiNode extends JFrame implements DictioInterface{
         foundWords.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+                lastSelectedWord = wordsUpdated.get(GetWordIndex(foundWords)).getWord();
+                System.out.println(lastSelectedWord);
                 description.setText(wordsUpdated.get(GetWordIndex(foundWords)).getDefinition());
             }
         });
@@ -120,6 +125,8 @@ public class LexiNode extends JFrame implements DictioInterface{
         allWordList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+                lastSelectedWord = wordsUpdated.get(GetWordIndex(allWordList)).getWord();
+                System.out.println(lastSelectedWord);
                 description.setText(wordsUpdated.get(GetWordIndex(allWordList)).getDefinition());
             }
         });
@@ -147,6 +154,7 @@ public class LexiNode extends JFrame implements DictioInterface{
      */
     @Override
     public ArrayList<String> SearchWord(String searchWord){
+        lastSelectedWord = searchWord;
         boolean hasMatch = false;
         ArrayList<String> searchList = new ArrayList<>();
         for (int i = 0; i < wordsUpdated.size(); i++ ){
@@ -172,26 +180,28 @@ public class LexiNode extends JFrame implements DictioInterface{
      * Pour modifier, il faut avoir le mot exact dans le champ de recherche.
      * @param word String
      * @param definition String
-     * @throws Exception invalid word
      */
     @Override
     public void AddWord(String word, String definition) {
-        char[] chars = word.toCharArray();
+        char[] chars = word.trim().toCharArray();
         boolean wordFound = false;
         int indexOfWord = 0;
         int count = 0;
 
-        for(char c : chars){
-            if(Character.isDigit(c) || !Character.isAlphabetic(c) || Character.isWhitespace(c)){
-                try {
-                    throw new Exception("Invalid word. Only letters are allowed");
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                count++;
-            }
-        }
+        try {
+            for (char c : chars) {
+                if (Character.isDigit(c) || !Character.isAlphabetic(c) || Character.isWhitespace(c)) {
+                    count++;
 
+                    throw new InvalidWordException("Invalid word. Only letters are allowed");
+                }
+                else{
+                }
+            }
+        }catch (InvalidWordException ex) {
+            ex.printStackTrace();
+        }
+        System.out.println(count);
         if(count==0) {
             for (int i = 0; i < wordsUpdated.size(); i++){
                 if (word.trim().equals(wordsUpdated.get(i).getWord().trim()) && !wordFound){

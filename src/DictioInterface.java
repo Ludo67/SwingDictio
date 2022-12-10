@@ -5,7 +5,7 @@ public interface DictioInterface {
 
     public ArrayList<String> SearchWord(String searchWord);
 
-    public void AddWord(String word, String definition);
+    public void AddWord(String word, String definition) throws InvalidWordException;
 
     public void SaveAsDocumemnt();
 

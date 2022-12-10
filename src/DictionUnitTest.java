@@ -37,7 +37,7 @@ public class DictionUnitTest {
      * Test Update an existing word
      */
     @Test
-    public void testUpdateDefinitionOfExistingWord(){
+    public void testUpdateDefinitionOfExistingWord() throws InvalidWordException {
         ArrayList<String> List = new ArrayList<>();
         List.add("Word");
         dictio1.AddWord("Word", "New Definition");
