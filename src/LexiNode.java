@@ -168,7 +168,8 @@ public class LexiNode extends JFrame implements DictioInterface{
     }
 
     /**
-     * Fonction qui prend un "word" et une "definition", puis regarde s'il existe deja. Si oui, il sera mis a jour. Sinon, il sera ajoute
+     * Fonction qui prend un "word" et une "definition", puis regarde s'il existe deja. Si oui, il sera mis a jour. Sinon, il sera ajouté.
+     * Pour modifier, il faut avoir le mot exact dans le champ de recherche.
      * @param word String
      * @param definition String
      * @throws Exception invalid word
