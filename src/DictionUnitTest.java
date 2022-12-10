@@ -42,12 +42,17 @@ public class DictionUnitTest {
     }
 
     @Test
+    public void TestGetWordIndex(){
+        JList foundWord = new JList(dictio1.SearchWord("Word").toArray());
+
+        assertEquals(0, dictio1.GetWordIndex(foundWord));
+    }
+
+    @Test
     public void testSearchWord(){
         ArrayList<String> List = new ArrayList<>();
         List.add("Word");
         List.add("Wordledydumb");
         assertEquals(List, dictio1.SearchWord("Wor"));
-
-
     }
 }
