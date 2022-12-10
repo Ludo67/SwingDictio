@@ -66,4 +66,18 @@ public class DictionUnitTest {
         List.add("Wordledydumb");
         assertEquals(List, dictio1.SearchWord("Wor"));
     }
+
+    /**
+     * Test add invalid word
+     */
+    @Test
+    public void testInvalidWordException(){
+        try{
+            dictio1.AddWord("2t3d?", "Definition");
+        }
+        catch(Exception e){
+            assertEquals("Invalid word. Only letters are allowed",e.getMessage());
+        }
+
+    }
 }
