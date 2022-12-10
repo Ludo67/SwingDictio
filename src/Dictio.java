@@ -70,6 +70,8 @@ public class Dictio extends JFrame implements DictioInterface{
                 OpenDataInFileAndSaveAsList();
             }
         });
+
+        /** Complexité = k */
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -79,6 +81,7 @@ public class Dictio extends JFrame implements DictioInterface{
             }
         });
 
+        /** Complexité = k */
         searchBox.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -102,6 +105,7 @@ public class Dictio extends JFrame implements DictioInterface{
 
         });
 
+        /** Complexité = k */
         foundWords.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -113,10 +117,10 @@ public class Dictio extends JFrame implements DictioInterface{
             @Override
             public void actionPerformed(ActionEvent e) {
                 SaveAsDocumemnt();
-
             }
         });
 
+        /** Complexité = k */
         allWordList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -125,6 +129,7 @@ public class Dictio extends JFrame implements DictioInterface{
         });
     }
 
+    /** Complexité = k */
     public static void main(String[] args) throws IOException {
         Dictio d = new Dictio();
         d.setContentPane(d.dictioPanel);
