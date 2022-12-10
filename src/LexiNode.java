@@ -14,7 +14,7 @@ import java.util.Scanner;
  * Class that extends JFrame containing all the elements in the Dictio.form.
  * Contains also actions that can be performed by the user.
  */
-public class Dictio extends JFrame implements DictioInterface{
+public class LexiNode extends JFrame implements DictioInterface{
     /**
      * Boite de recherche
      */
@@ -63,7 +63,7 @@ public class Dictio extends JFrame implements DictioInterface{
 
     public ArrayList<Word> wordsUpdated = new ArrayList<>();
 
-    public Dictio() {
+    public LexiNode() {
         loadBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -127,7 +127,7 @@ public class Dictio extends JFrame implements DictioInterface{
 
     /** Complexité = k */
     public static void main(String[] args) throws IOException {
-        Dictio d = new Dictio();
+        LexiNode d = new LexiNode();
         d.setContentPane(d.dictioPanel);
         d.setTitle("Dictio");
         d.setSize(900, 400);
